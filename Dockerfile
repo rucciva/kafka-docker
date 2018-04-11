@@ -1,6 +1,6 @@
 FROM openjdk:8-alpine
 
-LABEL maintainer="I Putu Ariyasa"
+LABEL maintainer="rucciva@gmail.com"
 
 ARG KAFKA_DOWNLOAD_URL
 ENV KAFKA_DOWNLOAD_URL ${KAFKA_DOWNLOAD_URL:-http://www-eu.apache.org/dist/kafka/1.1.0/kafka_2.11-1.1.0.tgz}
