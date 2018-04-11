@@ -16,23 +16,23 @@ done < <(env | grep 'KAFKA_SERVER_')
 
 # executable
 KAFKA_SERVER_EXECUTABLE="bin/kafka-server-start.sh"
-ARGS=("config/server.properties")
-ARGS+=("$@")
 
 # this if will check if the first argument is a flag
 # but only works if all arguments require a hyphenated flag
 # -v; -SL; -f arg; etc will work, but not arg1 arg2
 if [ "$#" -eq 0 ] || [ "${1#-}" != "$1" ]; then
-    echo "1"
-    set -- $KAFKA_SERVER_EXECUTABLE "${ARGS[@]}"
+    set -- $KAFKA_SERVER_EXECUTABLE "config/server.properties" "$@"
 fi
 
 # check for the expected command
-if [ "$1" = "$KAFKA_SERVER_EXECUTABLE" ]; then
-    echo "2"
-    # init db stuff....
-    # use gosu (or su-exec) to drop to a non-root user
-    exec $KAFKA_SERVER_EXECUTABLE  "${ARGS[@]}"
+if [ "$1" = "$KAFKA_SERVER_EXECUTABLE" ] && [ "$(id -u)" = '0' ]; then
+    
+    chown -R $KAFKA_USER:$KAFKA_GROUP $KAFKA_DATA_DIR $KAFKA_LOGS_DIR
+    
+    # make sure we can write to stdout and stderr as "$KAFKA_USER"
+    chown --dereference $KAFKA_USER:$KAFKA_GROUP "/proc/$$/fd/1" "/proc/$$/fd/2" || :
+
+    exec su-exec $KAFKA_USER:$KAFKA_GROUP "$@"
 fi
 
 # else default to run whatever the user wanted like "bash" or "sh"
