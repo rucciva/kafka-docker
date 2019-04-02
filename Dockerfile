@@ -3,7 +3,7 @@ FROM openjdk:8u201-jdk-alpine
 LABEL maintainer="rucciva@gmail.com"
 
 ARG KAFKA_DOWNLOAD_URL
-ENV KAFKA_DOWNLOAD_URL ${KAFKA_DOWNLOAD_URL:-https://archive.apache.org/dist/kafka/1.1.0/kafka_2.12-1.1.0.tgz}
+ENV KAFKA_DOWNLOAD_URL ${KAFKA_DOWNLOAD_URL:-https://www-us.apache.org/dist/kafka/2.2.0/kafka_2.12-2.2.0.tgz}
 
 ENV KAFKA_PARENT_DIR /opt 
 ENV KAFKA_HOME_DIR $KAFKA_PARENT_DIR/kafka
