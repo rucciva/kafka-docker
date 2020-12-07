@@ -25,8 +25,12 @@ services:
       ZOO_MY_ID: 3
       ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
   kafka:
-    image: rucciva/kafka:1.1.0
+    image: rucciva/kafka:2.2.0
     build: .
+    depends_on:
+      - zoo1
+      - zoo2
+      - zoo3
     restart: unless-stopped
     ports: 
       - 9092:9092
